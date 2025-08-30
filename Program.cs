@@ -24,7 +24,7 @@ public class App
     System.Console.WriteLine("Press [A] to add to your library");
     System.Console.WriteLine("Press [R] to read your library");
     System.Console.WriteLine("Press [D] to delete from your library");
-    System.Console.WriteLine("Press [E] to exit the Application");
+    System.Console.WriteLine("Press [S] to save library");
     var userInput = Console.ReadLine();
     char userInputCharacter = char.Parse(userInput);
 
@@ -42,8 +42,8 @@ public class App
         case 'd':
           DeletionFromLibrary.DeleteFromLibrary(filePath, library);
           break;
-        case 'E':
-        case 'e':
+        case 'S':
+        case 's':
           WriteToJsonLibrary.Write(filePath, library);
           break;
         default:
@@ -126,7 +126,6 @@ public static class DeletionFromLibrary
 {
   public static List<Book> DeleteFromLibrary(string filePath, List<Book> library)
   {
-    List<Book> updatedLibrary = library;
     System.Console.WriteLine("Which book would you like to remove from your library?");
     ReadLibrary.Read(filePath, library);
     System.Console.WriteLine();
@@ -139,7 +138,7 @@ public static class DeletionFromLibrary
         library.Remove(book);
       }
     }
-    return updatedLibrary;
+    return library;
   }
 }
 
