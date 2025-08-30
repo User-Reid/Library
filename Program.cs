@@ -18,6 +18,8 @@ public class App
 {
   public static void MainMenu(bool applicationStatus, string filePath, List<Book> library)
   {
+    do
+    {
     System.Console.WriteLine("What would you like to do?");
     System.Console.WriteLine("Press [A] to add to your library");
     System.Console.WriteLine("Press [R] to read your library");
@@ -26,30 +28,31 @@ public class App
     var userInput = Console.ReadLine();
     char userInputCharacter = char.Parse(userInput);
 
-    switch (userInputCharacter)
-    {
-      case 'A':
-      case 'a':
-        AddToLibrary.Add(filePath, library);
-        break;
-      case 'R':
-      case 'r':
-        ReadLibrary.Read(filePath, library);
-        break;
-      case 'D':
-      case 'd':
-        DeletionFromLibrary.DeleteFromLibrary(filePath, library);
-        break;
-      // case 'E':
-      // case 'e':
-      //   Exit();
-      //   break;
-      default:
-        {
-          applicationStatus = false;
-        }
-        break;
-    }
+      switch (userInputCharacter)
+      {
+        case 'A':
+        case 'a':
+          AddToLibrary.Add(filePath, library);
+          break;
+        case 'R':
+        case 'r':
+          ReadLibrary.Read(filePath, library);
+          break;
+        case 'D':
+        case 'd':
+          DeletionFromLibrary.DeleteFromLibrary(filePath, library);
+          break;
+        case 'E':
+        case 'e':
+          WriteToJsonLibrary.Write(filePath, library);
+          break;
+        default:
+          {
+            applicationStatus = false;
+          }
+          break;
+      }
+    } while (applicationStatus = true);
   }
 }
 
@@ -83,9 +86,17 @@ public static class ReadLibrary
     List<Book> updatedLibrary = library;
     var fileContents = File.ReadAllText(filePath);
     List<Book> jsonLibrary = JsonSerializer.Deserialize<List<Book>>(fileContents);
-    foreach (Book book in jsonLibrary)
+    if (jsonLibrary.Count > 0)
     {
-      System.Console.WriteLine(book);
+      foreach (Book book in jsonLibrary)
+      {
+        System.Console.WriteLine(book);
+      }
+    }
+    else
+    {
+      System.Console.WriteLine("Your library is empty homie🕸️");
+      System.Console.WriteLine();
     }
     return updatedLibrary;
   }
@@ -129,5 +140,28 @@ public static class DeletionFromLibrary
       }
     }
     return updatedLibrary;
+  }
+}
+
+public static class WriteToJsonLibrary
+{
+
+  public static void Write(string filePath, List<Book> library)
+  {
+    var serializedLibrary = JsonSerializer.Serialize(library);
+    File.WriteAllText(filePath, serializedLibrary);
+  }
+
+}
+
+public static class ReadFromJsonLibrary
+{
+  public static void Read(string filePath)
+  {
+    var library = JsonSerializer.Deserialize<List<Book>>(filePath);
+    foreach (Book book in library)
+    {
+      System.Console.WriteLine(book);
+    }
   }
 }
